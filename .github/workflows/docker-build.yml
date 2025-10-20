@@ -30,7 +30,7 @@ jobs:
       run: |
         wget https://m645b3e1bb36e-mrap.mrap.accesspoint.tos-global.volces.com/linux/amd64/tosutil
         chmod +x tosutil
-        sudo mv tosutil /usr/local/bin/tosutil
+        sudo cp tosutil /usr/local/bin/tosutil
         tosutil config -i ${{ secrets.TOSUTIL_ACCESS_KEY }} -k ${{ secrets.TOSUTIL_SECRET_KEY }} -e tos-cn-beijing.ivolces.com -re cn-beijing 
 
     # - name: 调试 - 显示环境变量
