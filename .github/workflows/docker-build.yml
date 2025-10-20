@@ -13,7 +13,7 @@ env:
   # 私有镜像仓库地址，例如：registry.example.com 或 harbor.company.com
   PRIVATE_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   # 镜像名称（不包含registry地址）
-  IMAGE_NAME: macroverse/ai_agent_app_test
+  IMAGE_NAME: macroverse/deepddg
 
 jobs:
   build-and-push:
