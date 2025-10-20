@@ -1,0 +1,84 @@
+name: 构建和推送 Docker 镜像
+
+on:
+  push:
+    branches: [ "master", "main" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "master", "main" ]
+  workflow_dispatch:
+
+env:
+  # 私有镜像仓库地址，例如：registry.example.com 或 harbor.company.com
+  PRIVATE_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+  # 镜像名称（不包含registry地址）
+  IMAGE_NAME: macroverse/ai_agent_app_test
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v5
+
+    - name: 设置 Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: 设置 tosutil
+      run: |
+        wget https://m645b3e1bb36e-mrap.mrap.accesspoint.tos-global.volces.com/linux/amd64/tosutil
+        chmod +x tosutil
+        mv tosutil /usr/local/bin/tosutil
+        tosutil config -i ${{ env.TOSUTIL_ACCESS_KEY }} -k ${{ env.TOSUTIL_SECRET_KEY }} -e tos-cn-beijing.ivolces.com -re cn-beijing 
+
+    # - name: 调试 - 显示环境变量
+    #   run: |
+    #     echo "PRIVATE_REGISTRY: ${{ env.PRIVATE_REGISTRY }}"
+    #     echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+    #     echo "完整镜像地址: ${{ env.PRIVATE_REGISTRY }}/${{ env.IMAGE_NAME }}"
+
+    - name: 登录到私有镜像仓库
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.PRIVATE_REGISTRY }}
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: 提取 Docker 元数据
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.PRIVATE_REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=ref,event=branch
+          type=ref,event=pr
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=raw,value=latest,enable={{is_default_branch}}
+    - name: Free disk space on Ubuntu runner
+      uses: kfir4444/free-disk-space@main
+      with:
+        # frees about 6 GB, warning: may remove required tools
+        tool-cache: false
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        swap-storage: true
+            
+
+    - name: 构建并推送 Docker 镜像
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: ./Dockerfile
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        # build-args: |
+        #   BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+

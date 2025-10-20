@@ -1,0 +1,15 @@
+AVAILABLE_ESM_MODELS = [
+    "models/esm2_t33_650M_UR50D",
+    "facebook/esm2_t48_15B_UR50D",
+    "facebook/esm2_t36_3B_UR50D",
+    "facebook/esm2_t33_650M_UR50D",
+    "facebook/esm2_t30_150M_UR50D",
+    "facebook/esm2_t12_35M_UR50D",
+    "facebook/esm2_t6_8M_UR50D",
+    "facebook/esm1b_t33_650M_UR50S",
+    "facebook/esm1v_t33_650M_UR90S_1",
+    "facebook/esm1v_t33_650M_UR90S_2",
+    "facebook/esm1v_t33_650M_UR90S_3",
+    "facebook/esm1v_t33_650M_UR90S_4",
+    "facebook/esm1v_t33_650M_UR90S_5",
+]

@@ -1,0 +1,73 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools",
+  "setuptools-scm>=8.0.4",
+]
+
+[project]
+name = "macroddg"
+description = "预测突变前后自由能的变化"
+readme = "README.md"
+keywords = [
+  "ddg",
+  "Deep Learning",
+]
+license = {file = "license/copyright", classifier = "License :: Other/Proprietary License"}
+maintainers = [
+  {name = "Lvjun Guo", email = "guolj@dp.tech"},
+]
+authors = [
+  {name = "Lvjun Guo", email = "guolj@dp.tech"},
+]
+requires-python = "==3.10"
+classifiers = [
+  "Programming Language :: Python :: 3.10",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  # "featurehub",
+  "biopandas",
+  "autogluon==0.7.0",
+  "openpyxl",
+  "pdbfixer",
+  "pyarmor",
+  "biopython",
+  "tqdm",
+]
+
+[tool.setuptools.package-data]
+mypkg = ["*.csv", "*.xlsx"]
+
+[project.scripts]
+run_macroddg = "macroddg.cli:main"
+run_macroddg_launching = "macroddg.app.launching.main:to_parser"
+
+[tool.setuptools]
+packages = ["macroddg"]
+
+[tool.setuptools_scm]
+write_to = "macroddg/_version.py"
+write_to_template = "version = __version__ = {version!r}\nversion_tuple = __version_tuple__ = {version_tuple!r}\nrevision = __revision__ = {scm_version.node!r}\n"
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+line_length = 120
+profile = "black"
+
+[tool.flake8]
+max-line-length = 120
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --cov"
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
+
+[tool.uv.sources]
+pdbfixer = { git = "https://github.com/openmm/pdbfixer" }
