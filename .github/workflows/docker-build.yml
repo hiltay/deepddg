@@ -2,22 +2,22 @@ name: 构建和推送 Docker 镜像
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: [ "dev", "main" ]
     tags:
       - 'v*'
   pull_request:
-    branches: [ "master", "main" ]
+    branches: [ "dev", "main" ]
   workflow_dispatch:
 
 env:
-  # 私有镜像仓库地址，例如：registry.example.com 或 harbor.company.com
+  # 私有镜像仓库地址，macroverse-cn-beijing.cr.volces.com
   PRIVATE_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
   # 镜像名称（不包含registry地址）
   IMAGE_NAME: macroverse/deepddg
 
 jobs:
   build-and-push:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - name: 检出代码
@@ -28,13 +28,9 @@ jobs:
       with:
           driver: docker
 
-    - name: 设置 tosutil，并下载数据
+    - name: 从tos拷贝数据
       run: |
-        wget https://m645b3e1bb36e-mrap.mrap.accesspoint.tos-global.volces.com/linux/amd64/tosutil
-        chmod +x tosutil
-        sudo mv tosutil /usr/local/bin/tosutil
-        tosutil config -i ${{ secrets.TOSUTIL_ACCESS_KEY }} -k ${{ secrets.TOSUTIL_SECRET_KEY }} -e tos-cn-beijing.volces.com -re cn-beijing 
-        tosutil cp -r -flat tos://dp-macroverse/lyh/deepddg/ .
+        cp -r /dp-macroverse/lyh/deepddg/* .
 
     # - name: 调试 - 显示环境变量
     #   run: |
@@ -60,16 +56,6 @@ jobs:
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
           type=raw,value=latest,enable={{is_default_branch}}
-    - name: Free disk space on Ubuntu runner
-      uses: kfir4444/free-disk-space@main
-      with:
-        # frees about 6 GB, warning: may remove required tools
-        tool-cache: false
-        android: true
-        dotnet: true
-        haskell: true
-        large-packages: true
-        swap-storage: true
             
 
     - name: 构建并推送 Docker 镜像
