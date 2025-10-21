@@ -6,4 +6,4 @@ COPY . .
 
 RUN uv sync
 
-CMD ["/bin/bash"]
+CMD ["/bin/zsh"]
