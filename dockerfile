@@ -6,4 +6,4 @@ COPY . .
 
 RUN uv sync
 
-ENTRYPOINT ["/opt/nvidia/nvidia_entrypoint.sh"]
+CMD ["/bin/bash"]
