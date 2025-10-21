@@ -6,4 +6,4 @@ COPY . .
 
 RUN uv sync
 
-ENTRYPOINT ["uv", "run", "test.py"]
+ENTRYPOINT ["/opt/nvidia/nvidia_entrypoint.sh"]
