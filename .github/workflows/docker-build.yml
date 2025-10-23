@@ -59,17 +59,17 @@ jobs:
           type=raw,value=latest,enable={{is_default_branch}}
             
 
-    - name: 构建并推送 Docker 镜像
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: ./Dockerfile
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        no-cache: true
-        # build-args: |
-        #   BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+    # - name: 构建并推送 Docker 镜像
+    #   uses: docker/build-push-action@v6
+    #   with:
+    #     context: .
+    #     file: ./Dockerfile
+    #     push: ${{ github.event_name != 'pull_request' }}
+    #     tags: ${{ steps.meta.outputs.tags }}
+    #     labels: ${{ steps.meta.outputs.labels }}
+    #     no-cache: true
+    #     # build-args: |
+    #     #   BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
 
     - name: 清理docker images
       run: |
