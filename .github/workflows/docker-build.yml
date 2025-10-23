@@ -74,3 +74,4 @@ jobs:
     - name: 清理docker images
       run: |
         docker rmi $(docker images -q)
+        docker system prune -f
