@@ -69,8 +69,8 @@ jobs:
         # no-cache: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
-        build-args: |
-          BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
+        # build-args: |
+        #   BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
 
     - name: 清理docker images
       if: ${{ runner.name == 'self-hosted' }}
