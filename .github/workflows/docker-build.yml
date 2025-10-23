@@ -72,6 +72,5 @@ jobs:
         #   BUILDKIT_CONTEXT_KEEP_GIT_DIR=1
 
     - name: 清理docker images
-      if: ${{ runner.name == 'self-hosted' }}
       run: |
         docker rmi $(docker images -q)
